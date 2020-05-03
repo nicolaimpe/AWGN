@@ -1,0 +1,23 @@
+{% extends "LifePlanner/base.html" %}
+{% block title %}
+Login
+{% endblock%}
+{% block content %}
+<h1>Se connecter</h1>
+<p> Methode integrée</p>
+{% if error %}
+<p><strong>Utilisateur inconnu ou mauvais de mot de passe.</strong></p>
+{% endif %}
+
+{% if user.is_authenticated %}
+Vous êtes connecté, {{ user.username }} !
+{% else %}
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    {{ form }}
+    <p>la</p>
+    <input type="submit" value="login" />
+    <input type="hidden" name="next" value="{% url 'projets_liste' %}">
+</form>
+{% endif %}
+{% endblock %}
