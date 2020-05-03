@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Base Life Planner{% endblock %}</title>
+</head>
+<body>
+<header>Life Planner</header>
+    <nav>
+       {% block nav %}
+       <ul>
+        <a href=/accounts/logout>
+        Logout
+        </a>
+       </ul>
+       {% endblock %}
+   </nav>
+   <section id="content">
+       {% block content %}{% endblock %}
+   </section>
+<footer>&copy; Life planner</footer>
+</body>
+</html>

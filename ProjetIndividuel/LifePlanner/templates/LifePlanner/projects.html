@@ -1,0 +1,28 @@
+{% extends "LifePlanner/base.html" %}
+{% block title %}
+Project list
+{% endblock%}
+{% block content %}
+<h1>Projects</h1>
+
+{% if error %}
+<p><strong>Utilisateur inconnu ou mauvais de mot de passe.</strong></p>
+{% endif %}
+
+{% if user.is_authenticated %}
+Welcome {{ user.username }} !
+Your projects are
+<ul style="list-style-type:none;">
+{% for project in projects %}
+    <li> <a href="{% url 'taches_liste' project.id%}">
+        {{ project.name}}
+        </a>
+        </li>
+    {% empty %}
+            <p>No projects</p>
+{% endfor %}
+</ul>
+{% else %}
+User not identicated
+{% endif %}
+{% endblock %}

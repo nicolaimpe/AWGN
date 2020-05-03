@@ -1,0 +1,23 @@
+{% extends "LifePlanner/base.html" %}
+{% block title %}
+Tasks of {{project.name}}
+{% endblock%}
+{% block content %}
+<h1>Show project</h1>
+
+{% if user.is_authenticated %}
+Hey {{ user.username }} ! Here's the taks associated with the project {{project.name}}
+<ul style="list-style-type:none;">
+{% for task in tasks %}
+    <li>
+    {{ task.name}} </a>
+        </li>
+    {% empty %}
+            <p>No projects</p>
+{% endfor %}
+</ul>
+
+{% else %}
+User not identicated
+{% endif %}
+{% endblock %}
