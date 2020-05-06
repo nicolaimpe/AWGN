@@ -1,23 +1,29 @@
 {% extends "LifePlanner/base.html" %}
-{% block title %}
-Login
-{% endblock%}
+
+{% block title %}Login{% endblock%}
+
+{% comment %}Container for a message to the user when in the page /accounts/login but is already logged in{% endcomment %}
 {% block content %}
-<h1>Se connecter</h1>
-<p> Methode integrée</p>
-{% if error %}
-<p><strong>Utilisateur inconnu ou mauvais de mot de passe.</strong></p>
-{% endif %}
 
 {% if user.is_authenticated %}
-Vous êtes connecté, {{ user.username }} !
+
+
+<p>You are already logged in, {{ user.username }} ! </p>
+<button type="button" class="btn btn-ouline-secondary"><a href="{% url 'projets_liste' %}">To your projects</a></button>
+
 {% else %}
-<form method="post" action="{% url 'login' %}">
+{% comment %} Container for a message to the user{% endcomment %}
+
+<h3>Please enter your username and password</h3>
+
+{% comment %}Form for entering username and password. Implemented Bootstrap form inline with margins{% endcomment %}
+<form class="form-inline p-3 mb-10  mx-5" method="post" action="{% url 'login' %}">
     {% csrf_token %}
     {{ form }}
-    <p>la</p>
-    <input type="submit" value="login" />
-    <input type="hidden" name="next" value="{% url 'projets_liste' %}">
+    {% comment %}These lines are needed to put some more between the entries of the form{% endcomment %}
+    <input class="form-control mb-10  mx-5" type="submit" value="Login">
+    <input class="form-control mb-10  mx-5" type="hidden" name="next" value="{% url 'projets_liste' %}">
 </form>
+
 {% endif %}
 {% endblock %}

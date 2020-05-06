@@ -1,10 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "LifePlanner/base.html" %}
+
+{% block title %}Show task {{task.name}} of {{project.name}}{% endblock%}
+
+{%block nav%}
+<a class="nav-link " href="{% url 'projets_liste' %}">Projects</a>
+<a class="nav-link " href="{% url 'taches_liste' project.id%}">{{project.name}}</a>
+{%endblock%}
+
+
+{% block content %}
+{% comment %}Heding plus button for modification of the task{% endcomment %}
+<h1>{{project.name}}</h1>
+<h3>{{task.name}}</h3>
+<span class="float-right">
+<button type="button" class="btn btn-secondary ">
+            <a class="text-white" href="{% url 'modification_tache' project.id task.id %}">Modify task</a>
+        </button>
+</span>
+
+<p>Looks like you have something to do..have a look at {{task.name}}</p>
+
+{% comment %}Table of the details of the task{% endcomment %}
+<table class="table table-striped ml-5">
+    <tr>
+        <td>Assigned</td>
+        <td><h5 class="badge badge-secondary">{{task.assigned}}</h5></td>
+    </tr>
+    <tr>
+        <td>Start date</td>
+        <td>{{task.start_date|date:"DATE_FORMAT" }}</td>
+    </tr>
+    <tr>
+        <td>Due date</td>
+        <td>{{task.due_date |date:"DATE_FORMAT"}}</td>
+    </tr>
+    </tr>
+    <tr>
+        <td>Status</td>
+        <td><h1 class="badge badge-danger">{{task.status }}</h1></td>
+    </tr>
+</table>
+
+{% comment %}History of the journal, for loop in order to show all the comments the users left to the task{% endcomment %}
+<h5>History :</h5>
+
+<table class="table table-striped ml-5">
+    {% for journal in journals %}
+    <tr>
+        <td><h5 class="badge badge-secondary"> {{journal.author}}</h5></td>
+        <td>{{journal.date|date:"DATE_FORMAT"}}</td>
+        <td>{{journal.entry}}</td>
+    </tr>
+    {% empty %}
+    <p>No history</p>
+    {% endfor %}
+</table>
+
+{% comment %}Form for adding an item to the journal of the task{% endcomment %}
+<form class="form-inline  mb-10 pb-5" method="POST" action="{% url 'affichage_tache'  task.id %}">
+    {% csrf_token %}
+    <label for="entry"><h5>Leave your update : </h5></label>
+    {% comment %}These lines are needed to put some more between the entries of the form{% endcomment %}
+    <input class="form-control mb-10   mx-5" id="entry" type="text" name="entry">
+    <input class="form-control mb-10  mx-5" type="submit" value="Add">
+</form>
+
+
+{% endblock %}

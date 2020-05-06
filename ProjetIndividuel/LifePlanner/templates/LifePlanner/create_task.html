@@ -1,10 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "LifePlanner/base.html" %}
+
+{% comment %}In the case you're editing or not the page has two different titles{% endcomment %}
+{% block title %}
+{% if isEditing%}
+Edit a task
+{%else%}
+Create a new task
+{%endif%}
+{% endblock%}
+
+{%block nav%}
+<a class="nav-link " href="{% url 'projets_liste' %}">Projects</a>
+<a class="nav-link " href="{% url 'taches_liste' project.id%}">{{project.name}}</a>
+{%endblock%}
+
+{% comment %}A crispy form is used to render the form with Bootstrap without adding characteristics line by line. Details here :
+https://simpleisbetterthancomplex.com/tutorial/2018/08/13/how-to-use-bootstrap-4-forms-with-django.html {% endcomment %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h1>{{project.name}}</h1>
+
+{% comment %}If switcher for the content of the page (note it ends before the form{% endcomment %}
+{% if isEditing%}
+<h3>Modify task {{current_task.name}}</h3>
+
+{%else%}
+<h3>New task</h3>
+
+Please fill the form if you want to a new task for the project {{project.name}}
+{%endif%}
+
+{% comment %}The difference between a creation of a task and a modification is the action once the form is sumbmitted{% endcomment %}
+<form class="form mt-3 mb-10 pb-5" method="POST"
+      action="{% if isEditing%}{%url 'modification_tache' project.id current_task.id%}{%else%}{%url 'creation_tache'  project.id%}{% endif %}">
+
+    {% csrf_token %}
+    {{form|crispy}}
+    {% comment %}A crispy form is used to render the form with Bootstrap without adding characteristics line by line.
+    Details here :
+    https://simpleisbetterthancomplex.com/tutorial/2018/08/13/how-to-use-bootstrap-4-forms-with-django.html {%
+    endcomment %}
+
+
+    {% comment %}Ad button is reformatted with Bootstrap{% endcomment %}
+    <input class="form-control mb-10  mx-5" type="submit" value="Add">
+</form>
+
+{% endblock %}

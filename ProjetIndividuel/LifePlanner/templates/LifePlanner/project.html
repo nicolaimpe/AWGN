@@ -1,23 +1,54 @@
 {% extends "LifePlanner/base.html" %}
-{% block title %}
-Tasks of {{project.name}}
-{% endblock%}
+
+
+{% block title %}Tasks of {{project.name}}{% endblock%}
+
+{%block nav%}
+<a class="nav-link " href="{% url 'projets_liste' %}">Projects</a>
+<a class="nav-link " href="{% url 'taches_liste' project.id%}">{{project.name}}</a>
+{%endblock%}
+
 {% block content %}
-<h1>Show project</h1>
 
-{% if user.is_authenticated %}
-Hey {{ user.username }} ! Here's the taks associated with the project {{project.name}}
-<ul style="list-style-type:none;">
-{% for task in tasks %}
-    <li>
-    {{ task.name}} </a>
-        </li>
-    {% empty %}
-            <p>No projects</p>
-{% endfor %}
-</ul>
+{% comment %}Floating right button for adding a new task{% endcomment %}
+<span class="float-right">
+  <button type="button" class="btn btn-secondary  mr-5 px-5">
+    <a class="text-white" href="{% url 'creation_tache' project.id %}">New task</a>
+  </button>
+</span>
 
-{% else %}
-User not identicated
-{% endif %}
+{% comment %}Message to the user{% endcomment %}
+<h2>{{project.name}}</h2>
+<p>Hey {{ user.username }} ! Here's the taks associated with the project {{project.name}}</p>
+<p>Click on the name of a task to show the details</p>
 {% endblock %}
+
+{% comment %}Table with for loop on the tasks of the project{% endcomment %}
+{%block table%}
+<tr>
+    <th>Task</th>
+    <th>Assigned</th>
+    <th>Start date</th>
+    <th>Due date</th>
+    <th></th>
+</tr>
+{% for task in tasks%}
+<tr>
+    <td>
+        <a class="text-dark" href="{% url 'affichage_tache' task.id%}">{{ task.name}}</a>
+    </td>
+    <td>{{task.assigned}}</td>
+    <td>{{task.start_date|date:"DATE_FORMAT"}}</td>
+    <td>{{task.due_date|date:"DATE_FORMAT"}}</td>
+    <td>
+        <button type="button" class="btn btn-secondary ">
+            <a class="text-white" href="{% url 'modification_tache' project.id task.id %}">Modify task</a>
+        </button>
+    </td>
+</tr>
+{% empty %}
+<p>No tasks</p>
+{% endfor %}
+
+{% endblock%}
+

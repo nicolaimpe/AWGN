@@ -16,9 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
-from django.conf import settings
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # Urls of the developed application
     path('LifePlanner/', include('LifePlanner.urls')),
+    # Url for the login page with a generic view
     path('accounts/', include('django.contrib.auth.urls'))
 ]
